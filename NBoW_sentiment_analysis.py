@@ -2,6 +2,9 @@
 #Performing a Split of the data into a training and a Test set
 #Then we will load and clean the reviews
 
+import nltk
+nltk.download('stopwords')
+
 from nltk.corpus import stopwords
 import string
 
