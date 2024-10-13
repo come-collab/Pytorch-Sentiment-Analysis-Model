@@ -7,6 +7,8 @@ nltk.download('stopwords')
 
 from nltk.corpus import stopwords
 import string
+from collections import Counter
+from os import listdir
 
 #load doc into memory :
 
@@ -37,9 +39,36 @@ def clean_doc (doc):
 
     return tokens
 
+#Load doc and add to vocab
+def add_doc_to_vocab(filename, vocab):
+    #load doc
+    doc = load_doc(filename)
+    #clean doc
+    tokens = clean_doc(doc)
 
-#Load the document : 
-filename = ('txt_sentoken/pos/cv000_29590.txt')
-text = load_doc(filename)
-tokens = clean_doc(text)
-print(tokens)
+    #updates counts
+    vocab.update(tokens)
+
+
+#Load all the docs in a directory : 
+def process_docs(directory, vocab):
+    #walk through all files in the folder: 
+    for filename in listdir(directory):
+        #Skip any reviews in test set
+        if filename.startswith('cv9'):
+            continue
+        #create a full path of the file to open : 
+        path = directory + '/' + filename
+        #add doc to vocab 
+        add_doc_to_vocab(path,vocab)
+
+#define vocab    
+vocab = Counter()
+
+#add all docs to vocab
+process_docs('txt_sentoken/pos',vocab)
+process_docs('txt_sentoken/neg',vocab)
+#print the size of the vocab
+print(len(vocab))
+#Print the top word of the vocab : 
+print(vocab.most_common(50))
