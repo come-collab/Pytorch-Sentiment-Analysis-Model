@@ -20,9 +20,22 @@ def load_doc(filename):
     return text
 
 
+# save list to file
+def save_list(lines, filename):
+ # convert lines to a single blob of text
+ data = '\n'.join(lines)
+ # open file
+ file = open(filename, 'w')
+ # write text
+ file.write(data)
+ # close file
+ file.close()
+ 
+
+
+
 def clean_doc (doc):
     tokens = doc.split()
-    
     #Remove the punctuation from each token
     table = str.maketrans('','',string.punctuation)
     tokens = [w.translate(table) for w in tokens]
@@ -72,3 +85,5 @@ process_docs('txt_sentoken/neg',vocab)
 print(len(vocab))
 #Print the top word of the vocab : 
 print(vocab.most_common(50))
+# save tokens to a vocabulary file
+# save_list(tokens,'vocab.txt')
