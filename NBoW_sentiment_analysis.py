@@ -1,3 +1,4 @@
+#This is the code for the most basic NLP model the bag of word but done from scratch
 #First prepare the data 
 #Performing a Split of the data into a training and a Test set
 #Then we will load and clean the reviews
@@ -65,6 +66,7 @@ def add_doc_to_vocab(filename, vocab):
 
 #Load all the docs in a directory : 
 def process_docs(directory, vocab):
+    lines = list()
     #walk through all files in the folder: 
     for filename in listdir(directory):
         #Skip any reviews in test set
@@ -72,18 +74,42 @@ def process_docs(directory, vocab):
             continue
         #create a full path of the file to open : 
         path = directory + '/' + filename
+        
+        #load and clean the doc : 
+        line = doc_to_line(path,vocab)
+
+        #add to list : 
+        lines.append(line)
+        return lines
+        
         #add doc to vocab 
         add_doc_to_vocab(path,vocab)
+
+def doc_to_line(filename,vocab):
+    #load the doc : 
+    doc = load_doc(filename)
+
+    #clean the doc and convert to tokens :
+    tokens = clean_doc(doc)
+
+    #Fitler by vocab :
+    tokens = [w for w in tokens if w in vocab]
+    return ''.join(tokens)
+
+
+
 
 #define vocab    
 vocab = Counter()
 
-#add all docs to vocab
-process_docs('txt_sentoken/pos',vocab)
-process_docs('txt_sentoken/neg',vocab)
-#print the size of the vocab
-print(len(vocab))
-#Print the top word of the vocab : 
-print(vocab.most_common(50))
-# save tokens to a vocabulary file
-# save_list(tokens,'vocab.txt')
+# load the vocabulary
+vocab_filename = 'vocab.txt'
+vocab = load_doc(vocab_filename)
+vocab = vocab.split()
+vocab = set(vocab)
+
+# load all training reviews
+positive_lines = process_docs('txt_sentoken/pos', vocab)
+negative_lines = process_docs('txt_sentoken/neg', vocab)
+# summarize what we have
+print(len(positive_lines), len(negative_lines))
