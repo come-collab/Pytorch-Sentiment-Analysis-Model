@@ -64,26 +64,21 @@ def add_doc_to_vocab(filename, vocab):
     vocab.update(tokens)
 
 
-#Load all the docs in a directory : 
+# load all docs in a directory
 def process_docs(directory, vocab):
     lines = list()
-    #walk through all files in the folder: 
+    # walk through all files in the folder
     for filename in listdir(directory):
-        #Skip any reviews in test set
+        # skip any reviews in the test set
         if filename.startswith('cv9'):
             continue
-        #create a full path of the file to open : 
+        # create the full path of the file to open
         path = directory + '/' + filename
-        
-        #load and clean the doc : 
-        line = doc_to_line(path,vocab)
-
-        #add to list : 
+        # load and clean the doc
+        line = doc_to_line(path, vocab)
+        # add to list
         lines.append(line)
-        return lines
-        
-        #add doc to vocab 
-        add_doc_to_vocab(path,vocab)
+    return lines
 
 def doc_to_line(filename,vocab):
     #load the doc : 
@@ -111,5 +106,8 @@ vocab = set(vocab)
 # load all training reviews
 positive_lines = process_docs('txt_sentoken/pos', vocab)
 negative_lines = process_docs('txt_sentoken/neg', vocab)
+
+
+print(len(vocab))
 # summarize what we have
 print(len(positive_lines), len(negative_lines))
